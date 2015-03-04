@@ -23,10 +23,14 @@ def infinite_list(list_):
             i = 0
 
 
+def make_slug(faker):
+    return u"-".join(faker.words(nb=7))
+
+
 def _factory_Document(self, owner=None):
-    doc = Document(name=self.faker.slug(),
-                    title=self.faker.sentence(),
-                    body=u"\n".join(self.faker.sentences(10)))
+    doc = Document(name=make_slug(self.faker),
+                   title=self.faker.sentence(),
+                   body=u"\n".join(self.faker.sentences(10)))
     self.session.add(doc)
     if owner:
         with self.session.no_autoflush:
@@ -34,29 +38,33 @@ def _factory_Document(self, owner=None):
 
     return doc
 
+
 def _factory_File(self, owner=None):
-    obj = File(name=self.faker.slug(), title=self.faker.sentence())
+    obj = File(name=make_slug(self.faker), title=self.faker.sentence())
     self.session.add(obj)
     if owner:
         with self.session.no_autoflush:
             set_groups(owner, obj, ['role:owner'])
 
     return obj
+
 
 def _factory_Image(self, owner=None):
-    obj = Image(name=self.faker.slug(), title=self.faker.sentence())
+    obj = Image(name=make_slug(self.faker), title=self.faker.sentence())
     self.session.add(obj)
     if owner:
         with self.session.no_autoflush:
             set_groups(owner, obj, ['role:owner'])
 
     return obj
+
 
 def _factory_Principal(self):
     """ Construct a principal
     """
     principal = Principal(self.faker.user_name(), email=self.faker.email())
     return principal
+
 
 default_factories = {
     Document: _factory_Document,
@@ -166,4 +174,3 @@ class Generator(object):
         self.session.flush()
 
         return obc[0]
-

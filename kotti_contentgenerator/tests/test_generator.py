@@ -33,9 +33,8 @@ class TestGenerator:
         assert principals['stamm.leandra'].email == u'yoel.oconner@botsford.com'
 
         assert len(root) == 5
-        assert root[u'nam-exercitationem'].type_info.name == 'Document'
-
-        # TODO: test users
+        assert root[u'in-laborum-ut-consequatur-non-et-est'].type_info.name == \
+            'Document'
 
     def test_depth_2(self, db_session):
         root = {}
