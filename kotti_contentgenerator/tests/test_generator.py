@@ -24,7 +24,8 @@ class TestGenerator:
     def test_it(self, db_session):
         root = {}
         gen = Generator(1, depth=1, top_level=5, sub_level=1, users=2)
-        gen.generate(root)
+        count = gen.generate(root)
+        assert count == 5
 
         principals = get_principals()
         assert len(principals) == 3
@@ -34,7 +35,49 @@ class TestGenerator:
         assert len(root) == 5
         assert root[u'nam-exercitationem'].type_info.name == 'Document'
 
+        # TODO: test users
+
     def test_depth_2(self, db_session):
         root = {}
-        gen = Generator(1, depth=2, top_level=2, sub_level=10, users=2)
-        gen.generate(root)
+        gen = Generator(1, depth=2, top_level=2, sub_level=10, users=1)
+        count = gen.generate(root)
+        assert count == 22
+        assert root.values()[0].type_info.name == u'Document'
+        assert len(root.values()[0].children[0].children) == 0
+
+    def test_no_children(self, db_session):
+        from kotti.resources import File, Image
+
+        root = {}
+        gen = Generator(1, depth=3, top_level=2, sub_level=10, users=1,
+                        content_types=(File, Image))
+        count = gen.generate(root)
+        assert count == 22
+        assert len(root.values()[0].children[0].children) == 0
+
+    def test_use_all_content_types(self, db_session):
+        from kotti.resources import File, Image
+
+        root = {}
+        gen = Generator(1, depth=2, top_level=2, sub_level=10, users=1,
+                        content_types=(File, Image))
+        count = gen.generate(root)
+        assert count == 22
+        assert [x.type_info.name for x in root.values()[0].children] == \
+            ['File', 'Image'] * 5
+
+    def test_not_addable_to_parent(self, db_session):
+        from kotti.resources import File, Image
+
+        Image.type_info.addable_to = []
+
+        root = {}
+        gen = Generator(1, depth=3, top_level=2, sub_level=10, users=1,
+                        content_types=(File, Image))
+
+        count = gen.generate(root)
+        assert count == 22
+        assert [x.type_info.name for x in root.values()[0].children] == \
+            ['File'] * 10
+
+        Image.type_info.addable_to = [u'Document']

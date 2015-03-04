@@ -1,5 +1,6 @@
 # Generic
 *~
+*.swp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -55,3 +56,10 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# pip/virtualenv
+bin/
+include/
+lib/
+local/
+src/

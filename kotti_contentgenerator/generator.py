@@ -11,6 +11,7 @@ from kotti.security import set_groups
 def infinite_list(list_):
     """ return an infinite stream of items from a list
 
+    :param list_: a python list
     """
     i = 0
 
@@ -21,10 +22,9 @@ def infinite_list(list_):
             i = 0
 
 
-
 class Generator(object):
 
-    def __init__(self, seed=None, depth=1, top_level=10, sub_level=1000,
+    def __init__(self, seed=None, depth=3, top_level=10, sub_level=10,
                  users=10, root_types=(Document,),
                  content_types=(Document, File, Image),
                  factories=None):
@@ -40,8 +40,9 @@ class Generator(object):
                           content type name. This can be used to add new
                           factories
 
-        The default configuration will create 10 root objects, each with 100000
-        children.
+        The default configuration will create 10 root objects, each with 10
+        children. These children will also get their own 10 children, down to
+        3 levels deep (including the root objects).
         """
 
         self.faker = Faker()
@@ -70,8 +71,10 @@ class Generator(object):
         To make the process deterministic we iterate over the provided types
 
         :param root: the object where content will be added
+        :result: the number of create objects
         """
 
+        obc = [0]   # total created objects. Using list to avoid enclosure issue
         users = []
         principals = get_principals()
 
@@ -87,8 +90,7 @@ class Generator(object):
         for i in range(self.top_level):
             obj = self.factories[root_types.next()](users.next())
             root[obj.name] = obj
-
-        self.session.flush()
+            obc[0] = obc[0] + 1
 
         content_types = infinite_list(self.content_types)
 
@@ -111,6 +113,7 @@ class Generator(object):
 
                 obj = self.factories[ct](users.next())
                 parent[obj.name] = obj
+                obc[0] = obc[0] + 1
 
                 i += 1
                 for j in range(self.sub_level):
@@ -119,6 +122,10 @@ class Generator(object):
         level = 0
         for child in root.values():
             create_children(child, level)
+
+        self.session.flush()
+
+        return obc[0]
 
     def _factory_Document(self, owner=None):
         doc = Document(name=self.faker.slug(),
@@ -141,7 +148,7 @@ class Generator(object):
         return obj
 
     def _factory_Image(self, owner=None):
-        obj = File(name=self.faker.slug(), title=self.faker.sentence())
+        obj = Image(name=self.faker.slug(), title=self.faker.sentence())
         self.session.add(obj)
         if owner:
             with self.session.no_autoflush:
