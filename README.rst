@@ -7,7 +7,9 @@ having dummy content inserted in your testing website, etc).
 
 .. image:: https://raw.githubusercontent.com/Pixelblaster/kotti_contentgenerator/master/screenshots/contentgenerator.png
   :alt: kotti_contentgenerator screenshot
-
+  :width: 500
+  :align: center
+  
 Usage
 =====
 
