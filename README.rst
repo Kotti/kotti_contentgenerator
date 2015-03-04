@@ -5,6 +5,8 @@ This is an extension to `Kotti`_ that allows adding lots of fake content to
 your website. This could be useful in various testing situations (performance,
 having dummy content inserted in your testing website, etc).
 
+. image:: screenshots/contentgenerator.png
+  :alt: kotti_contentgenerator screenshot
 
 Usage
 =====
