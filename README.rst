@@ -6,9 +6,9 @@ website.
 
 |build status|_
 
-Development happens at https://github.com/tiberiuichim/kotti_contentgenerator
+Development happens at https://github.com/pixelblaster/kotti_contentgenerator
 
-.. |build status| image:: https://secure.travis-ci.org//kotti_contentgenerator.png?branch=master
+.. |build status| image:: https://secure.travis-ci.org/pixelblaster/kotti_contentgenerator.png?branch=master
 .. _build status: http://travis-ci.org/pixelblaster/kotti_contentgenerator
 .. _Kotti: http://pypi.python.org/pypi/Kotti
 
@@ -21,5 +21,5 @@ Just clone its `Github repository`_ and submit your contributions as pull reques
 
 .. _alembic: http://pypi.python.org/pypi/alembic
 .. _alembic documentation: http://alembic.readthedocs.org/en/latest/index.html
-.. _tracker: https://github.com/tiberiuichim/kotti_contentgenerator/issues
+.. _tracker: https://github.com/pixelblaster/kotti_contentgenerator/issues
 .. _Github repository: https://github.com/pixelblaster/kotti_contentgenerator

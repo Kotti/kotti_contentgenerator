@@ -38,7 +38,7 @@ setup(
     ],
     author='Kotti developers',
     author_email='kotti@googlegroups.com',
-    url='https://github.com/tiberiuichim/kotti_contentgenerator',
+    url='https://github.com/pixelblaster/kotti_contentgenerator',
     keywords='kotti sqlalchemy pyramid',
     license="BSD-derived (http://www.repoze.org/LICENSE.txt)",
     packages=find_packages(),
