@@ -6,6 +6,7 @@ from kotti.resources import DBSession
 from kotti.security import Principal
 from kotti.security import get_principals
 from kotti.security import set_groups
+from copy import deepcopy
 
 
 def infinite_list(list_):
@@ -20,6 +21,49 @@ def infinite_list(list_):
         i = i + 1
         if i == len(list_):
             i = 0
+
+
+def _factory_Document(self, owner=None):
+    doc = Document(name=self.faker.slug(),
+                    title=self.faker.sentence(),
+                    body=u"\n".join(self.faker.sentences(10)))
+    self.session.add(doc)
+    if owner:
+        with self.session.no_autoflush:
+            set_groups(owner, doc, ['role:owner'])
+
+    return doc
+
+def _factory_File(self, owner=None):
+    obj = File(name=self.faker.slug(), title=self.faker.sentence())
+    self.session.add(obj)
+    if owner:
+        with self.session.no_autoflush:
+            set_groups(owner, obj, ['role:owner'])
+
+    return obj
+
+def _factory_Image(self, owner=None):
+    obj = Image(name=self.faker.slug(), title=self.faker.sentence())
+    self.session.add(obj)
+    if owner:
+        with self.session.no_autoflush:
+            set_groups(owner, obj, ['role:owner'])
+
+    return obj
+
+def _factory_Principal(self):
+    """ Construct a principal
+    """
+    principal = Principal(self.faker.user_name(), email=self.faker.email())
+    return principal
+
+default_factories = {
+    Document: _factory_Document,
+    File: _factory_File,
+    Image: _factory_Image,
+    Principal: _factory_Principal,
+}
 
 
 class Generator(object):
@@ -55,12 +99,7 @@ class Generator(object):
         self.root_types = root_types
         self.content_types = content_types
 
-        self.factories = {
-            Document: self._factory_Document,
-            File: self._factory_File,
-            Image: self._factory_Image,
-            Principal: self._factory_Principal,
-        }
+        self.factories = deepcopy(default_factories)
         self.factories.update(factories or {})
 
         self.session = DBSession()
@@ -77,9 +116,10 @@ class Generator(object):
         obc = [0]   # total created objects. Using list to avoid enclosure issue
         users = []
         principals = get_principals()
+        principal_factory = self.factories[Principal]
 
         for i in range(self.users):
-            user = self._factory_Principal()
+            user = principal_factory(self)
             principals[user.id] = user
             users.append(user)
 
@@ -88,7 +128,7 @@ class Generator(object):
         # add toplevel content to root
         root_types = infinite_list(self.root_types)
         for i in range(self.top_level):
-            obj = self.factories[root_types.next()](users.next())
+            obj = self.factories[root_types.next()](self, users.next())
             root[obj.name] = obj
             obc[0] = obc[0] + 1
 
@@ -111,7 +151,7 @@ class Generator(object):
                 if parent.type_info.name not in ct.type_info.addable_to:
                     continue
 
-                obj = self.factories[ct](users.next())
+                obj = self.factories[ct](self, users.next())
                 parent[obj.name] = obj
                 obc[0] = obc[0] + 1
 
@@ -127,37 +167,3 @@ class Generator(object):
 
         return obc[0]
 
-    def _factory_Document(self, owner=None):
-        doc = Document(name=self.faker.slug(),
-                       title=self.faker.sentence(),
-                       body=u"\n".join(self.faker.sentences(10)))
-        self.session.add(doc)
-        if owner:
-            with self.session.no_autoflush:
-                set_groups(owner, doc, ['role:owner'])
-
-        return doc
-
-    def _factory_File(self, owner=None):
-        obj = File(name=self.faker.slug(), title=self.faker.sentence())
-        self.session.add(obj)
-        if owner:
-            with self.session.no_autoflush:
-                set_groups(owner, obj, ['role:owner'])
-
-        return obj
-
-    def _factory_Image(self, owner=None):
-        obj = Image(name=self.faker.slug(), title=self.faker.sentence())
-        self.session.add(obj)
-        if owner:
-            with self.session.no_autoflush:
-                set_groups(owner, obj, ['role:owner'])
-
-        return obj
-
-    def _factory_Principal(self):
-        """ Construct a principal
-        """
-        principal = Principal(self.faker.user_name(), email=self.faker.email())
-        return principal
