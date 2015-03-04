@@ -1,4 +1,5 @@
 from kotti.testing import DummyRequest
+from mock import MagicMock
 
 
 class TestGeneratorView:
@@ -39,3 +40,20 @@ class TestGeneratorView:
 
         assert set(params['content_types']) == set([Document, File, Image])
         assert params['root_types'] == [Document]
+
+    def test_view_schema(self, db_session, monkeypatch):
+        from kotti_contentgenerator.views import make_generator_schema
+        from kotti_contentgenerator.generator import Generator
+        schema = make_generator_schema(Generator())
+
+        choices = \
+            set([(u'class kotti.resources.File', u'class kotti.resources.File'),
+                 (u'class kotti.security.Principal',
+                  u'class kotti.security.Principal'),
+                 (u'class kotti.resources.Document',
+                  u'class kotti.resources.Document'),
+                 (u'class kotti.resources.Image', u'class kotti.resources.Image'
+                  )])
+
+        assert set(schema['root_types'].widget.values) == choices
+        assert set(schema['content_types'].widget.values) == choices
