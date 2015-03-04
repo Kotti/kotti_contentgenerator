@@ -33,8 +33,7 @@ def _factory_Document(self, owner=None):
                    body=u"\n".join(self.faker.sentences(10)))
     self.session.add(doc)
     if owner:
-        with self.session.no_autoflush:
-            set_groups(owner, doc, ['role:owner'])
+        set_groups(owner, doc, ['role:owner'])
 
     return doc
 
@@ -43,8 +42,7 @@ def _factory_File(self, owner=None):
     obj = File(name=make_slug(self.faker), title=self.faker.sentence())
     self.session.add(obj)
     if owner:
-        with self.session.no_autoflush:
-            set_groups(owner, obj, ['role:owner'])
+        set_groups(owner, obj, ['role:owner'])
 
     return obj
 
@@ -53,8 +51,7 @@ def _factory_Image(self, owner=None):
     obj = Image(name=make_slug(self.faker), title=self.faker.sentence())
     self.session.add(obj)
     if owner:
-        with self.session.no_autoflush:
-            set_groups(owner, obj, ['role:owner'])
+        set_groups(owner, obj, ['role:owner'])
 
     return obj
 
