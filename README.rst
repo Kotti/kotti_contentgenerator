@@ -1,9 +1,21 @@
 kotti_contentgenerator
 **********************
 
-This is an extension to `Kotti`_ that allows adding lots of fake content to your
-website. This could be useful in testing situations (performance, having dummy
-content inserted in your testing website, etc).
+This is an extension to `Kotti`_ that allows adding lots of fake content to
+your website. This could be useful in various testing situations (performance,
+having dummy content inserted in your testing website, etc).
+
+
+Usage
+=====
+
+You can get the `@@contentgenerator` view by including `kotti_contentgenerator.views`
+to your `pyramid.includes` setting::
+
+    pyramid.includes =
+        pyramid_debugtoolbar
+        pyramid_tm
+        kotti_contentgenerator.views
 
 |build status|_
 
