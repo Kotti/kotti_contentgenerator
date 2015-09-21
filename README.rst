@@ -16,7 +16,7 @@ You can get the ``@@contentgenerator`` view by including
 Screenshot
 ----------
 
-.. image:: https://raw.githubusercontent.com/Pixelblaster/kotti_contentgenerator/master/screenshots/contentgenerator.png
+.. image:: https://raw.githubusercontent.com/Kotti/kotti_contentgenerator/master/screenshots/contentgenerator.png
   :alt: kotti_contentgenerator screenshot
   :width: 500
   :align: center
@@ -64,8 +64,8 @@ seed number, the generated strings are the same for all repeated calls.
 
 Development happens at `Github repository`_
 
-.. |build status| image:: https://secure.travis-ci.org/pixelblaster/kotti_contentgenerator.png?branch=master
-.. _build status: http://travis-ci.org/pixelblaster/kotti_contentgenerator
+.. |build status| image:: https://secure.travis-ci.org/Kotti/kotti_contentgenerator.png?branch=master
+.. _build status: http://travis-ci.org/Kotti/kotti_contentgenerator
 .. _Kotti: http://pypi.python.org/pypi/Kotti
 
 
@@ -75,4 +75,4 @@ Development
 Contributions to kotti_contentgenerator are highly welcome.
 Just clone its `Github repository`_ and submit your contributions as pull requests.
 
-.. _Github repository: https://github.com/pixelblaster/kotti_contentgenerator
+.. _Github repository: https://github.com/Kotti/kotti_contentgenerator
